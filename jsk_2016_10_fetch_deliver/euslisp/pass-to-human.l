@@ -1,9 +1,5 @@
 #!/usr/bin/env roseus
 
-;;実機を動かす場合は、事前に以下の２つのファイルを実行しておく。
-;;roslaunch pointcloud_screenpoint.launch　(~/semi_ws内にあるlaunchファイル)
-;; /opt/ros/indigo/lib/opencv_apps/face_detection image:=/head_camera/rgb/image_raw __name:=face_detection  _debug_view:=true _use_camera_info:=true _image_transport:=theora (theoraという圧縮された画像を用いて顔認識をする。)
-
 (load "package://fetcheus/fetch-interface.l")
 (fetch-init)
 (print ";; done face-init")
