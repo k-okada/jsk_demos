@@ -21,7 +21,7 @@
       (setq req (instance jsk_pcl_ros::TransformScreenpointRequest :init))
       (send req :x cx)
       (send req :y cy)
-      ;(print (list 'face cx cy))
+      (print (list 'face cx cy))
       (setq res (ros::service-call "pointcloud_screenpoint/screen_to_point" req))
       (setq theta-x (atan (/ (send res :point :x) (send res :point :z))))
       (setq theta-y (atan (/ (send res :point :y) (send res :point :z))))
@@ -33,7 +33,6 @@
       ;;カメラのy軸正方向とneck-pの正方向は同じ。
       (send *ri* :angle-vector-raw (send *fetch* :angle-vector) 1000 :head-controller)
       (unix:usleep 500000) ;;0.5秒
-      (find-people msg)
       ;;(send *ri* :wait-interpolation)
       ))
     )
