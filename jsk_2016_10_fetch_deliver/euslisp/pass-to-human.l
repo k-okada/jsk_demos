@@ -113,7 +113,7 @@
       (if (eq res nil)
 	  ()
 	(progn
-	  (send *fetch* :angle-vector (send *ri* :state :potentio-vector))
+	  ;(send *fetch* :angle-vector (send *ri* :state :potentio-vector))
 	  ;;thetaはせいぜい-0.5~0.5[rad]くらい
 					;(print (list (send res :point :x) (send res :point :y) (send res :point :z)))
 	  (setq theta-x (atan (/ (send res :point :x) (send res :point :z))))
@@ -130,7 +130,7 @@
 					;(format t "x:~A y:~A z:~A~%" (send res :point :x) (send res :point :y) (send res :point :z))
 					;(format t "neck-y:~A neck-p:~A~%" (send *fetch* :head :neck-y :joint-angle) (send *fetch* :head :neck-p :joint-angle))
 					;(format t "theta-x[deg]:~A theta-y[deg]:~A~%" (rad2deg theta-x) (rad2deg theta-y))
-	  (send *ri* :angle-vector (send *fetch* :angle-vector))
+	  (send *ri* :angle-vector-raw (send *fetch* :angle-vector) 1000 :head-controller)
 	  (unix:usleep 500000) ;;0.5秒
 	  ;;顔認識のプログラムを呼ぶ。
 	  (find-people msg)
