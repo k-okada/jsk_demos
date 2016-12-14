@@ -8,6 +8,7 @@
 (ros::load-ros-manifest "jsk_pcl_ros")
 (ros::load-ros-manifest "std_msgs")
 
+(setq run-watasu t)
 ;;腕を上げ、ものを渡す関数。
 (defun watasu ()
   (send *ri* :start-grasp)
@@ -80,7 +81,7 @@
 	    (send *ri* :speak (format nil "~A" count)))
 	(setq count 0))
       ;;3回以上連続で目の前に人がいればwatasu呼んでものを渡す。またフラグ変数をnilにする。
-      (if (> count 2)
+      (if (and (> count 2) run-watasu)
 	  (progn (format t "watasu~%")
 		 (watasu) (setq count 0) (setq flag nil) (setq flag1 nil))
 	nil)
