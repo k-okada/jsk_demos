@@ -1,4 +1,3 @@
-
 ;忘れ物した動き
 (defun forget nil
   ; 首振り
@@ -51,13 +50,6 @@
   (send *ri* :wait-interpolation)
  
   (send *ri* :angle-vector (send *fetch* :angle-vector) 2000)
-  (send *ri* :wait-interpolation)
-)
-
-;リセットポーズになる
-(defun reset_pose nil
-  (send *fetch* :reset-pose)
-  (send *ri* :angle-vector (send *fetch* :angle-vector) 5000)
   (send *ri* :wait-interpolation)
 )
 
