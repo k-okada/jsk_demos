@@ -5,7 +5,6 @@
 (setq *normal-vec* nil)
 
 (defun door-detec-callback (msg)
-  (print "a")
   (setq *normal-vec* (send (car (send msg :coefficients)) :values))
   (setq normal-vec-y (elt *normal-vec* 1))
   (print normal-vec-y)
@@ -26,9 +25,6 @@
 
 (ros::subscribe "/multi_plane_estimate/output_coefficients" jsk_recognition_msgs::ModelCoefficientsArray #'door-detec-callback)
 ;;(ros::subscribe "/multi_plane_estimate/output_polygon" jsk_recognition_msgs::PolygonArray #'cb)
-;;(ros::subscribe "/multi_plane_estimate/output_polygon" jsk_recognition_msgs::PolygonArray #'
-
-
 (do-until-key
  ;;(x::window-main-one)
  (ros::sleep)
