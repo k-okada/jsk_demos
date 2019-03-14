@@ -62,12 +62,16 @@
 (defun address-color-check nil
   (print "checking color...")
   (cond ((> (send (one-shot-subscribe "/address_detection/red/euclidean_clustering/cluster_num" jsk_recognition_msgs::Int32Stamped) :data) 0)
-	 (return-from address-color-check "red"))
+	 (progn
+	   (send *ri* :speak-en "the color of box is red")
+	   (return-from address-color-check "red")
+	   ))
 	((> (send (one-shot-subscribe "/address_detection/green/euclidean_clustering/cluster_num" jsk_recognition_msgs::Int32Stamped) :data) 0)
-	 (return-from address-color-check "green"))
-	;; ((> (one-shot-subscribe "/address_detection/red/euclidean_clustering/cluster_num" jsk_recognition_msgs::Int32Stamped) 0)
-	;;  (return "blue"))
-	 (t nil)
+	 (progn
+	   (send *ri* :speak-en "the color of box is geen")	   
+	   (return-from address-color-check "green")
+	   )
+	 )
 	)
  )
 
@@ -75,7 +79,7 @@
   (progn
     (let (address)
       (send *fetch* :angle-vector look-angle-1)
-      (send *ri* :angle-vector look-angle-1 10000)
+      (send *ri* :angle-vector look-angle-1 6000)
       (send *ri* :wait-interpolation)
       (setq address (address-color-check))
       (if address (return-from check-address address))
@@ -100,7 +104,7 @@
       
 
       (send *fetch* :angle-vector look-angle-5)
-      (send *ri* :angle-vector look-angle-5 10000)
+      (send *ri* :angle-vector look-angle-5 6000)
       (send *ri* :wait-interpolation)
       (setq address (address-color-check))
       (if address (return address))      

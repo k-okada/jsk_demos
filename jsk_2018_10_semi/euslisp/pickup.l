@@ -56,22 +56,22 @@
     (print "picking up...")
     ;; collison object を作る
     ;;*fetch*を毎回reset-poseにして同じようにikを解かせる
-    ;;(setq a (send (send (send (car *bx-list*) :copy-worldcoords) :translate #f(-100 0 -10)) :rotate (/ pi 5) :y))
-    
+    ;;(setq a (send (send (send (car *bx-list*) :copy-worldcoords) :translate #f(-100 0 -10)) :rotate (/ pi 5) :y))    
     (send *fetch* :reset-pose)
     (send *fetch* :angle-vector #f(378.434 38.8984 17.8564 -88.2018 100.007 -251.993 90.7448 124.849 0.0 0.0))
     ;;ikを解きやすい場所に一回移動
     (setq box-coords (send (car bx-list) :copy-worldcoords))
+    (send *ri* :speak-en "approaching")
     (send *ri* :stop-grasp)
-    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 0.0 -150.0)) :rotate (/ pi -2) :y)) 10000);;一旦上に
+    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 -30.0 -150.0)) :rotate (/ pi -2) :y)) 6000);;一旦上に
     (print "upper pos...")
     (send *ri* :wait-interpolation)
-    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 0.0 -35.0)) :rotate (/ pi -2) :y)) 10000);;つかむ場所まで下げる
+    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 -30.0 -35.0)) :rotate (/ pi -2) :y)) 6000);;つかむ場所まで下げる
     (print "downing...")
     (send *ri* :wait-interpolation)
     (send *ri* :start-grasp :effort 60 :wait t);;つかむ
     (print "graspping...")
-    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 0.0 -150.0)) :rotate (/ pi -2) :y)) 2000);;もう一度上に持ち上げる
+    (send *ri* :angle-vector (send *fetch* :inverse-kinematics (send (send (send box-coords :copy-worldcoords) :translate #f(0.0 -30.0 -150.0)) :rotate (/ pi -2) :y)) 2000);;もう一度上に持ち上げる
     (send *ri* :wait-interpolation)
     ) 
   )
@@ -83,10 +83,13 @@
   (let (address)
     (progn
       (print "cheking address and storing box ...")
+      (send *ri* :speak-en "cheking address")
       (setq address (check-address))
+      (cond ((= (length address) 3) (send *ri* :speak-en "the color of the box is red"))
+	    ((= (length address) 4) (send *ri* :speack-en "the color of the box is green")))
+      (send *ri* :speak-en "storing the box")
       (store-box-to-basket address)
       (ros::set-param (format nil "/box_number/~A" address) (+ (ros::get-param (format nil "/box_number/~A" address)) 1))
-      (format t "address of bos is ~A" address )
       (print "sotring box")
       )
     )
@@ -100,32 +103,32 @@
 
 (defun set-collision-object nil
   (send *co* :wipe-all)
-  (send *co* :add-object  *table* :frame-id "base_link" :relative-pose (make-coords :pos (float-vector 600 0 0))) ;;tableをcollision objectとして設定
+  (send *co* :add-object  *table* :frame-id "base_link" :relative-pose (make-coords :pos (float-vector 800 0 0))) ;;tableをcollision objectとして設定
   )
 
 (defun initial-pose nil
-  (send *ri* :angle-vector watching-pose 10000)
+  (send *ri* :angle-vector watching-pose 6000)
+  (send *fetch* :angle-vector watching-pose)
   (send *ri* :wait-interpolation)
   )
-
-;;initialize
 (setq pickup-status 1)
-
-;; (setq a (send *ri* :state :angle-vector))
-;; (send *fetch* :angle-vector a)
 
 (defun max-length-edge (bbox)
   (car (sort (mapcar #'(lambda (edge) (send edge :length)) (send bbox :all-edges)) #'>=))
   )
 
 (defun is-size-appropriate (bx-list)
-  (if (< (car (sort (mapcar #'(lambda (bbox) (max-length-edge bbox)) bx-list) #'>=)) *length-threshold*) t
-  nil)
+  (let (max-edge-len)
+    (setq max-edge-len(car (sort (mapcar #'(lambda (bbox) (max-length-edge bbox)) bx-list) #'>=)))
+    (if (numberp max-edge-len) nil
+      (setq max-edge-len 1000))
+    (if (> *length-threshold* max-edge-len) t
+      nil)
+    )
   )
-
 (do-until-key
  (x::window-main-one) ;; IRT viewerの視点を変えられる。見にくければ変えよう
- ;;箱たちの一変の長さの最大値が*length-threshold*を超えていなければ,つかむ動作に入る 
+ ;;箱たちの一変の長さの最大値が*length-threshold*を超えていなければ,つかむ動作に入る
  (if (is-size-appropriate *bx-list*)
      (let (bx-list-tmp)
        (setq bx-list-tmp *bx-list*)
@@ -133,8 +136,8 @@
        (initial-pose)
        (reach-arm bx-list-tmp)
        (if (= pickup-status 1)
-	   (store-box)
-	 )
+       	   (store-box)
+       	 )
        (initial-pose)
        (unix:sleep 1)
        )
