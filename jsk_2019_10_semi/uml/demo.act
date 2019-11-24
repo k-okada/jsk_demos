@@ -6,7 +6,11 @@ start
 
 partition YoshiaAbe {
 
+:こどものところにいく;
+
 :お願い事をつぶやく;
+
+:お願い事を理解する;
 
 }
 
@@ -14,6 +18,8 @@ partition YoshiaAbe {
 
 partition YoshiaAbe {
 
+:変装する場所にいく;
+　
 :変装する;
 
 }
