@@ -1,0 +1,20 @@
+- git:
+    local-name: denso_cobotta_ros
+    uri: https://github.com/k-okada/denso_cobotta_ros
+    version: make_robotmodel_reusable
+- git:
+    local-name: denso_robot_ros
+    uri: https://github.com/DENSORobot/denso_robot_ros
+    version: 3.2.0
+- git:
+    local-name: franka_panda_description
+    uri: https://github.com/justagist/franka_panda_description
+    version: 6233561
+- git:
+    local-name: gazebo_panda
+    uri: https://github.com/k-okada/gazebo_panda
+    version: use_joint_trajectory_action
+- git:
+    local-name: jsk_demos
+    uri: https://github.com/k-okada/jsk_demos
+    version: science_animal

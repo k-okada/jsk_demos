@@ -1,0 +1,58 @@
+<launch>
+  <!-- "paused": Determine starting Gazebo in a paused state or not. -->
+  <arg name="paused" default="false"/>
+  <!-- "use_sim_time": Ask ROS nodes to get the simulation time.-->
+  <arg name="use_sim_time" default="true"/>
+  <!-- "gui": Launch with user interface.-->
+  <arg name="gui"  default="true"/>
+  <!-- "recording": Enable gazebo state log recording.-->
+  <arg name="recording"  default="false"/>
+  <!-- "debug": Start gzserver in debug mode.-->
+  <arg name="debug"  default="false"/>
+  <!-- "verbose": Run gzserver and gzclient with verbose, printing a lot of info.-->
+  <arg name="verbose"  default="false"/>
+
+  <!-- launch simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="$(find science_animal)/worlds/lights.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="recording" value="$(arg recording)"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="verbose" value="$(arg verbose)"/>
+  </include>
+
+  <include file="$(find science_animal)/launch/cobotta.launch" >
+    <arg name="robot_name" value="robot_1" />
+    <arg name="gripper_type" default="parallel"/>
+    <arg name="init_x" value="0.3" />
+    <arg name="init_y" value="0.3" />
+    <arg name="init_z" value="0" />
+    <arg name="init_R" value="0" />
+    <arg name="init_P" value="0" />
+    <arg name="init_Y" value="$(eval 225.0 / 180.0 *3.1415 )" />
+  </include>
+  <include file="$(find science_animal)/launch/cobotta.launch" >
+    <arg name="robot_name" value="robot_2" />
+    <arg name="gripper_type" default="parallel"/>
+    <arg name="init_x" value="0.3" />
+    <arg name="init_y" value="-0.3" />
+    <arg name="init_z" value="0" />
+    <arg name="init_R" value="0" />
+    <arg name="init_P" value="0" />
+    <arg name="init_Y" value="$(eval 135.0 / 180.0 * 3.1415 )" />
+  </include>
+
+  <!-- multiple panda robot is not suported yet -->
+  <include file="$(find science_animal)/launch/panda.launch" >
+    <arg name="robot_name" value="robot_3" />
+    <arg name="init_x" value="-0.3" />
+    <arg name="init_y" value="0.3" />
+    <arg name="init_z" value="0" />
+    <arg name="init_R" value="0" />
+    <arg name="init_P" value="0" />
+    <arg name="init_Y" value="$(eval 315.0 / 180.0 * 3.1415 )" />
+  </include>
+
+</launch>

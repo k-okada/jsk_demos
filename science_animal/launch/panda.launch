@@ -1,0 +1,60 @@
+<launch>
+  <!-- robot name -->
+  <arg name="robot_name" default="robot" />
+  <!-- x component of initial position, meters -->
+  <arg name="init_x" default="0" />
+  <!-- y component of initial position, meters -->
+  <arg name="init_y" default="0" />
+  <!-- z component of initial position, meters -->
+  <arg name="init_z" default="0" />
+  <!-- roll angle of initial orientation, radians -->
+  <arg name="init_R" default="0" />
+  <!-- pitch angle of initial orientation, radians -->
+  <arg name="init_P" default="0" />
+  <!-- yaw angle of initial orientation, radian -->
+  <arg name="init_Y" default="0" />
+
+  <arg name="ns" value="" />
+  <arg name="load_gripper" default="false"/>
+  <arg name="load_gazebo" default="true"/>
+  <arg name="static" default="true"/>
+
+  <group>
+    <!-- copied from gazebo_panda/launch/simple_world.launch -->
+
+    <!-- This argument sets the initial joint states -->
+    <arg name="initial_joint_states"
+         default=" -J panda::panda_joint1 0.000
+                  -J panda::panda_joint2 -0.785
+                  -J panda::panda_joint3 0.0
+                  -J panda::panda_joint4 -2.356
+                  -J panda::panda_joint5 0.0
+                  -J panda::panda_joint6 1.57
+                  -J panda::panda_joint7 0.785"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find franka_panda_description)/robots/panda_arm_hand.urdf.xacro load_gripper:=$(arg load_gripper) load_gazebo:=$(arg load_gazebo) use_gazebo_control:=true"/>
+
+
+    <param name="/arm/root_name" value="panda_link0" />
+    <param if="$(arg load_gripper)" name="/arm/tip_name" value="panda_hand" />
+    <param unless="$(arg load_gripper)" name="/arm/tip_name" value="panda_link8" />
+
+    <param if="$(arg load_gripper)" name="/franka_gripper/robot_ip" value="sim" />
+    <param if="$(arg load_gripper)" name="/arm/gravity_tip_name" value="panda_hand" />
+    <param unless="$(arg load_gripper)" name="/arm/gravity_tip_name" value="panda_link8" />
+
+    <!-- Spawn urdf of the robot -->
+    <node name="robot_description" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model panda $(arg initial_joint_states) -x $(arg init_x) -y $(arg init_y) -z $(arg init_z) -R $(arg init_R) -P $(arg init_P) -Y $(arg init_Y)"/>
+
+    <!-- create a tf with base frame as 'base' (to match aml_robot) -->
+    <node pkg="tf" type="static_transform_publisher" name="base_to_link0" args="0 0 0 0 0 0 1 base panda_link0 100" />
+    <node pkg="tf" type="static_transform_publisher" name="world_to_base" args="0 0 0 0 0 0 1 world base 100" />
+
+    <!-- ros_control panda launch file -->
+    <include file="$(find gazebo_panda)/launch/panda_sim_controllers.launch">
+      <arg name="ns" value="$(arg ns)" />
+      <arg name="load_gripper" value="$(arg load_gripper)" />
+    </include>
+
+  </group>
+</launch>

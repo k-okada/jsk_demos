@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>science_animal</name>
+  <version>0.0.4</version>
+  <description>The science_animal package</description>
+
+  <maintainer email="k-okada@jsk.t.u-tkoyo.ac.jp">Kei Okada</maintainer>
+  <author email="k-okada@jsk.t.u-tkoyo.ac.jp">Kei Okada</author>
+
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>gazebo_ros</depend>
+  <depend>joint_state_controller</depend>
+  <depend>position_controllers</depend>
+  <depend>effort_controllers</depend>
+  <depend>joint_trajectory_controller</depend>
+
+  <depend>denso_cobotta_descriptions</depend>
+  <depend>denso_robot_descriptions</depend>
+  <depend>denso_cobotta_gazebo</depend>
+
+  <depend>tf</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>controller_manager</depend>
+  <depend>rqt_joint_trajectory_controller</depend>
+
+  <depend>franka_panda_description</depend>
+  <depend>gazebo_panda</depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>roslint</test_depend>
+  
+  <!-- <depend>panda_eus</depend> -->
+  <!-- <depend>jsk_panda_startup</depend> -->
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>

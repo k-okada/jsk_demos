@@ -1,0 +1,40 @@
+<launch>
+  <!-- robot name -->
+  <arg name="robot_name" default="robot" />
+  <!-- x component of initial position, meters -->
+  <arg name="init_x" default="0" />
+  <!-- y component of initial position, meters -->
+  <arg name="init_y" default="0" />
+  <!-- z component of initial position, meters -->
+  <arg name="init_z" default="0" />
+  <!-- roll angle of initial orientation, radians -->
+  <arg name="init_R" default="0" />
+  <!-- pitch angle of initial orientation, radians -->
+  <arg name="init_P" default="0" />
+  <!-- yaw angle of initial orientation, radian -->
+  <arg name="init_Y" default="0" />
+  <!-- "gripper type": select from none/parallel/vacuum. -->
+  <arg name="gripper_type" default="none"/>
+
+  <group ns="$(arg robot_name)" >
+    <!-- by default we do not overwrite the urdf. change the following to true to change the default behavior -->
+    <!-- load universal robot description format (urdf) -->
+    <param name="cobotta/robot_description" command="$(find xacro)/xacro --inorder $(find denso_cobotta_descriptions)/cobotta_description/cobotta.urdf.xacro gripper_type:=$(arg gripper_type) robot_description:=$(arg robot_name)/cobotta/robot_description robot_name:=$(arg robot_name)/cobotta"/>
+
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+          args="-urdf -param /$(arg robot_name)/cobotta/robot_description -robot_namespace /$(arg robot_name)/cobotta -model $(arg robot_name)_cobotta -x $(arg init_x) -y $(arg init_y) -z $(arg init_z) -R $(arg init_R) -P $(arg init_P) -Y $(arg init_Y)" respawn="false" output="screen" />
+
+    <!-- load joint controller configurations to parameter server -->
+    <rosparam file="$(find denso_cobotta_descriptions)/cobotta_description/denso_cobotta_control.yaml" command="load" />
+    <!-- load the controllers -->
+    <node ns="cobotta" name="controller_spawner" pkg="controller_manager" type="spawner" args="joint_state_controller arm_controller  --shutdown-timeout 3" respawn="false" output="screen"/>
+
+    <!-- load joint controller configurations for gazebo to parameter server -->
+    <!-- intentinally remove ns="cobotta" from rosparam, it outputs 'No p gain specified for pid', but default parameter is too soft -->
+    <rosparam file="$(find denso_cobotta_descriptions)/cobotta_description/gazebo_cobotta_control.yaml" command="load"/>
+    <node ns="cobotta" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" required="true">
+      <remap from="/joint_states" to="joint_states" />
+    </node>
+  </group>
+</launch>
