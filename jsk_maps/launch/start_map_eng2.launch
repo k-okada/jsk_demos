@@ -1,6 +1,7 @@
 <launch>
   <arg name="MACHINE" default="localhost" />
   <arg name="keepout" default="false" />
+  <arg name="launch_rviz" default="false" />
   <arg name="launch_map_server" default="true" />
   <arg name="use_machine" default="false" />
   <arg name="use_pictogram" default="false" />
@@ -31,4 +32,8 @@
     <param name="~scene" value="eng2" />
     <param name="~use_pictogram" value="$(arg use_pictogram)" />
   </node>
+  <!-- rviz -->
+  <node name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find jsk_maps)/launch/config/eng2.rviz"
+        if="$(arg launch_rviz)"/>
 </launch>
