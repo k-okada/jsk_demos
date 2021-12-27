@@ -1,5 +1,7 @@
 # jsk_2021_10_semi
 
+[![](http://img.youtube.com/vi/nkQucUiqb24/0.jpg)](http://www.youtube.com/watch?v=nkQucUiqb24 "")
+
 https://github.com/k-okada/jsk_demos/tree/jsk_2021_10_semi/jsk_2021_10_semi
 
 ## ロボットモデルの作り方
