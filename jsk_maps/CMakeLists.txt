@@ -2,8 +2,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(jsk_maps)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    rospy
+    dynamic_reconfigure)
 find_package(euslisp REQUIRED)
+
+catkin_python_setup()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES Linux)
   execute_process(COMMAND gcc -dumpmachine OUTPUT_VARIABLE GCC_MACHINE OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -38,7 +43,12 @@ else (EXISTS ${euslisp_SOURCE_DIR}/jskeus/eus/${ARCHDIR}/bin/irteusgl)
   message(FATAL_ERROR "cannot find irteusgl")
 endif(EXISTS ${euslisp_SOURCE_DIR}/jskeus/eus/${ARCHDIR}/bin/irteusgl)
 
-catkin_package()
+generate_dynamic_reconfigure_options(
+    cfg/StaticMapPublisher.cfg
+)
+
+catkin_package(
+)
 
 set(_generated_files
   ${PROJECT_SOURCE_DIR}/raw_maps/eng2-2f-0.05.yaml

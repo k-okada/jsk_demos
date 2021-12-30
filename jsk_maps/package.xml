@@ -12,16 +12,17 @@
   <author email="ueda@jsk.t.u-tokyo.ac.jp">Ryohei Ueda</author>
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>euslisp</build_depend>
-  <build_depend>jskeus</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>multi_map_server</build_depend>
   <build_depend>jsk_rviz_plugins</build_depend>
+  <build_depend>jskeus</build_depend>
+  <build_depend>multi_map_server</build_depend>
   <run_depend>euslisp</run_depend>
-  <run_depend>jskeus</run_depend>
-  <run_depend>imagemagick</run_depend>
   <run_depend>geometry_msgs</run_depend>
-  <run_depend>multi_map_server</run_depend>
+  <run_depend>imagemagick</run_depend>
   <run_depend>jsk_rviz_plugins</run_depend>
+  <run_depend>jskeus</run_depend>
+  <run_depend>multi_map_server</run_depend>
+  <run_depend>python-staticmap-pip</run_depend>
   <run_depend>visualization_msgs</run_depend>
   <test_depend>rostest</test_depend>
   <test_depend>jsk_tools</test_depend>

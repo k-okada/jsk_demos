@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Map1
         - /MarkerArray1/Namespaces1
       Splitter Ratio: 0.5029411911964417
     Tree Height: 549
@@ -104,46 +103,6 @@ Visualization Manager:
       Unreliable: false
       Use Timestamp: false
       Value: true
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Eng8/B1F
-      Topic: /eng8/b1f
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Eng8/1F
-      Topic: /eng8/1f
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Eng8/6F
-      Topic: /eng8/6f
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Alpha: 0.10000000149011612
-      Class: rviz/Map
-      Color Scheme: raw
-      Draw Behind: false
-      Enabled: true
-      Name: Map
-      Topic: /hongo
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
     - Class: jsk_rviz_plugin/PictogramArray
       Enabled: true
       Name: PictogramArray
@@ -179,18 +138,6 @@ Visualization Manager:
           Value: true
         eng2/8f:
           Value: true
-        eng8:
-          Value: true
-        eng8/1f:
-          Value: true
-        eng8/6f:
-          Value: true
-        eng8/6f/610:
-          Value: true
-        eng8/b1f:
-          Value: true
-        hongo:
-          Value: true
         map:
           Value: true
         world:
@@ -216,16 +163,6 @@ Visualization Manager:
                 {}
             eng2/8f:
               {}
-          eng8:
-            eng8/1f:
-              {}
-            eng8/6f:
-              eng8/6f/610:
-                {}
-            eng8/b1f:
-              {}
-          hongo:
-            {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -256,25 +193,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 359.2821044921875
+      Distance: 50.778934478759766
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 29.98914337158203
-        Y: -116.84634399414062
-        Z: -40.61910629272461
+        X: 0
+        Y: 0
+        Z: 0
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3403984308242798
+      Pitch: 0.3003982901573181
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.188566207885742
+      Yaw: 0.8653981685638428
     Saved: ~
 Window Geometry:
   Displays:

@@ -8,22 +8,60 @@
 
   <machine name="localhost" address="localhost" if="$(arg use_machine)" />
 
-  <node pkg="tf" type="static_transform_publisher" name="$(anon hongo_tf)"
-        args="-300 -300 0 0 0 0 /world /hongo 100"/>
-  <node name="$(anon map_server)" pkg="map_server" type="map_server"
-        args="$(find jsk_maps)/raw_maps/hongo-1.00.yaml" >
-    <remap from="map" to="/hongo"/>
-    <param name="frame_id" value="/hongo"/>
-  </node>
-
+  <!--
   <node name="publish_spot_hongo" pkg="roseus" type="roseus"
         args="$(find jsk_maps)/tools/publish_campus.l"
         machine="$(arg MACHINE)"
         output="screen" />
+  -->
+  <node pkg="jsk_maps" type="static_map_publisher.py" name="static_map_publisher" output="screen">
+      <remap from="/map" to="/static_map/map" />
+      <remap from="/map_meta_data" to="/static_map/map_meta_data" />
 
-  <!-- <include file="$(find jsk_maps)/launch/start_map_eng2.launch" /> -->
-  <node pkg="tf" type="static_transform_publisher" name="$(anon eng2_tfA)"
-        args="-10 200 10 -1.39626 0 0 /world /eng2 100"/> <!-- see bld-eng2 location in (make-hongo-campus) -->
+      <!-- parameters with dynamics reconfigure -->
+      <rosparam>
+          center_latitude: 35.713537979438996
+          center_longitude: 139.762305151285
+          zoom_level: 18
+      </rosparam>
+
+      <!-- parameters with rosparam -->
+      <rosparam>
+          initial_latitude: 35.713537979438996
+          initial_longitude: 139.762305151285
+          map_size: 1500
+          map_type: osm
+          initial_frame: world
+          static_map_frame: static_map_frame
+      </rosparam>
+  </node>
+
+  <node pkg="jsk_maps" type="static_lon_lat_transform_publisher.py" name="$(anon tf_hongo_main_gate)">
+      <rosparam>
+          from_frame_id: world
+          from_latitude: 35.713537979438996
+          from_longitude: 139.762305151285
+          to_frame_id: hongo_main_gate
+          to_latitude: 35.712995049681204
+          to_longitude: 139.75967053364684
+          diff_angle_from_to: 0.0
+      </rosparam>
+  </node>
+
+  <!--
+  Eng. 2 Building Section
+  -->
+  <node pkg="jsk_maps" type="static_lon_lat_transform_publisher.py" name="$(anon eng2_tfA_raw)">
+      <rosparam>
+          from_frame_id: world
+          from_latitude: 35.713537979438996
+          from_longitude: 139.762305151285
+          to_frame_id: eng2
+          to_latitude: 35.71443022192967
+          to_longitude: 139.7615547854118
+          diff_angle_from_to: 0.2
+      </rosparam>
+  </node>
 
   <include file="$(find jsk_maps)/launch/include/start_map_eng2_main.xml">
     <arg name="prefix" value="eng2_" />
@@ -43,9 +81,20 @@
     <param name="~use_pictogram" value="$(arg use_pictogram)" />
   </node>
 
-  <!-- <include file="$(find jsk_maps)/launch/start_map_eng8.launch" > -->
-  <node pkg="tf" type="static_transform_publisher" name="$(anon eng8_tfA)"
-        args="-140 220 10 1.74533 0 0 /world /eng8 100"/> <!-- see bld-eng8 location in (make-hongo-campus) -->
+  <!--
+  Eng. 8 Building Section
+  -->
+  <node pkg="jsk_maps" type="static_lon_lat_transform_publisher.py" name="$(anon eng8_tfA_raw)">
+      <rosparam>
+          from_frame_id: world
+          from_latitude: 35.713537979438996
+          from_longitude: 139.762305151285
+          to_frame_id: eng8
+          to_latitude: 35.71470007319424
+          to_longitude: 139.760512685666
+          diff_angle_from_to: 1.8
+      </rosparam>
+  </node>
 
   <include file="$(find jsk_maps)/launch/include/start_map_eng8_main.xml">
     <arg name="prefix" value="eng8_" />
@@ -78,6 +127,6 @@
   </node>
   <!-- rviz -->
   <node name="rviz" pkg="rviz" type="rviz"
-        args="-d $(find jsk_maps)/launch/config/hongo.rviz"
+        args="-d $(find jsk_maps)/config/hongo.rviz"
         if="$(arg launch_rviz)"/>
 </launch>

@@ -8,21 +8,14 @@
 
 (defun publish-spot ()
   (let* ((stamp (ros::time-now))
-         (header (instance std_msgs::header :init :stamp stamp :frame_id "/map"))
-         current-map-coords spots)
-
-    ;; resolve /world -> /eng/2f
-    (unless (and (send *tf-listener* :wait-for-transform "world" *current-map-id* stamp 2.0)
-                 (setq current-map-coords
-                       (send *tf-listener* :lookup-transform "world" *current-map-id* stamp)))
-      (ros::ros-error "Could not solve transform: 'world' -> '~A'" *current-map-id*)
-      (return-from publish-spot nil))
+         (header (instance std_msgs::header :init :stamp stamp :frame_id (format nil "/~A" *scene-name*)))
+         spots)
 
     ;; transform spots
     (dolist (spot (send *scene* :spots))
       (when (substringp (concatenate string *current-map-id* "/") (send spot :name))
         (push (cons (send spot :name)
-                    (send (send current-map-coords :transformation spot) :worldcoords))
+                    (send spot :worldcoords))
               spots)))
 
     ;; publish spots
