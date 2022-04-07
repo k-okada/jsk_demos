@@ -3,6 +3,8 @@ science_animal
 
 Gazebo simulation package for Cobotta and Panda
 
+![Gazebo Image](https://i.ibb.co/mtqVHqr/science-animal.png)
+
 # how to build package
 ```
 source /opt/ros/melodic/setup.bash
